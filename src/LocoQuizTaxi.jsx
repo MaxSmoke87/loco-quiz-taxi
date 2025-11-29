@@ -294,87 +294,90 @@ export default function LocoQuizTaxi() {
   const [question, setQuestion] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
 
+  const pools = { regelwerk, loco, fangfragen, allgemein, gaming };
+
   // Timer
   const [time, setTime] = useState(10);
   const [running, setRunning] = useState(false);
   const [maxTime, setMaxTime] = useState(10);
 
-  // Joker-System
-  const [jokers, setJokers] = useState({
-    taxi: true
-  });
-  const [taxiCooldown, setTaxiCooldown] = useState(0);
+  // Joker (Taxi-Joker mit 60s Cooldown)
+  const [jokerCooldown, setJokerCooldown] = useState(0);
 
-  // Hinweis Joker (optional, bleibt deaktiviert)
-  const [hint, setHint] = useState(null);
-
-  const pools = { regelwerk, loco, fangfragen, allgemein, gaming };
-
-  // Timer Effekt
+  // TIMER: runterzählen
   useEffect(() => {
     if (!running) return;
 
     if (time === 0) {
       setRunning(false);
       setShowAnswer(true);
-      new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg").play();
+      const audio = new Audio(
+        "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+      );
+      audio.play();
       return;
     }
 
-    const t = setTimeout(() => setTime((t) => t - 1), 1000);
+    const t = setTimeout(() => setTime((prev) => prev - 1), 1000);
     return () => clearTimeout(t);
   }, [time, running]);
 
-  // Cooldown Effekt
+  // JOKER COOLDOWN runterzählen
   useEffect(() => {
-    if (taxiCooldown <= 0) return;
+    if (jokerCooldown <= 0) return;
+
     const interval = setInterval(() => {
-      setTaxiCooldown((n) => n - 1);
+      setJokerCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
+
     return () => clearInterval(interval);
-  }, [taxiCooldown]);
+  }, [jokerCooldown]);
 
   const startTimer = (sec) => {
     setMaxTime(sec);
     setTime(sec);
     setRunning(true);
     setShowAnswer(false);
-    setHint(null);
   };
 
   const next = () => {
     const pool = pools[category];
+    if (!pool || pool.length === 0) return;
+
     const random = pool[Math.floor(Math.random() * pool.length)];
     setQuestion(random);
     setShowAnswer(false);
     setRunning(false);
     setTime(maxTime);
-    setHint(null);
   };
 
-  // TAXI-JOKER (Skip)
-  const useTaxiJoker = () => {
-    if (!jokers.taxi || taxiCooldown > 0) return;
-
-    next(); // Skip + neue Frage
-
-    setJokers((j) => ({ ...j, taxi: false }));
-    setTaxiCooldown(60);
+  // 🚕 Taxi-Joker: Frage skippen + 60s Cooldown
+  const useJoker = () => {
+    if (jokerCooldown > 0) return;
+    next(); // neue Frage
+    setJokerCooldown(60); // Cooldown starten
   };
 
   const progress = maxTime > 0 ? (time / maxTime) * 100 : 0;
+  const jokerProgress = (jokerCooldown / 60) * 100;
 
   return (
     <div className="w-full min-h-screen bg-gray-900 text-white flex items-start justify-center p-6 gap-6">
-
-      {/* ---------------------------------- */}
-      {/* QUIZ BOX */}
-      {/* ---------------------------------- */}
-      <div className="bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-3xl space-y-5 transition-all duration-300 ease-out">
-
+      {/* MAIN QUIZ CONTAINER */}
+      <div className="bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-xl space-y-5 transition-all duration-300 ease-out">
         {/* Header */}
         <div className="flex flex-col items-center gap-2">
-          <img src="https://i.ibb.co/k2vd4Mbk/Logo.png" className="w-40 opacity-90" />
+          <img
+            src="https://i.ibb.co/k2vd4Mbk/Logo.png"
+            alt="Loco City Logo"
+            className="w-40 opacity-90"
+          />
           <h1 className="text-3xl font-bold text-center text-white">
             Loco Quiz Taxi
             <br />
@@ -382,14 +385,16 @@ export default function LocoQuizTaxi() {
           </h1>
         </div>
 
-        {/* Kategorien */}
+        {/* Kategorie Auswahl */}
         <div className="flex gap-3 justify-center flex-wrap">
-          {["regelwerk", "loco", "allgemein", "fangfragen", "gaming"].map((cat) => (
+          {Object.keys(pools).map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${
-                category === cat ? "bg-gray-100 text-black" : "bg-gray-700"
+              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                category === cat
+                  ? "bg-white text-black shadow-lg shadow-white/40"
+                  : "bg-gray-700 hover:bg-gray-600"
               }`}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -404,16 +409,32 @@ export default function LocoQuizTaxi() {
 
         {/* Buttons */}
         <div className="flex gap-3 justify-center flex-wrap">
-          <button onClick={next} className="px-5 py-3 bg-gray-500 hover:bg-gray-400 text-black font-bold rounded-xl">
+          <button
+            onClick={next}
+            className="px-5 py-3 bg-gray-500 hover:bg-gray-400 text-black font-bold rounded-xl"
+          >
             Neue Frage
           </button>
 
-          {/* Timer Buttons */}
-          <button onClick={() => startTimer(5)} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl">⏱ 5s</button>
-          <button onClick={() => startTimer(10)} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl">⏱ 10s</button>
-          <button onClick={() => startTimer(15)} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl">⏱ 15s</button>
+          <button
+            onClick={() => startTimer(5)}
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl"
+          >
+            ⏱️ 5s
+          </button>
+          <button
+            onClick={() => startTimer(10)}
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl"
+          >
+            ⏱️ 10s
+          </button>
+          <button
+            onClick={() => startTimer(15)}
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-xl"
+          >
+            ⏱️ 15s
+          </button>
 
-          {/* Antwort */}
           {question && (
             <button
               onClick={() => setShowAnswer(!showAnswer)}
@@ -424,18 +445,43 @@ export default function LocoQuizTaxi() {
           )}
         </div>
 
-        {/* Timer Anzeige */}
+        {/* 🚕 Taxi-Joker Button mit gelber Progressbar */}
+        <button
+          onClick={useJoker}
+          disabled={jokerCooldown > 0}
+          className={`relative w-full px-5 py-3 mt-2 rounded-xl font-bold text-black overflow-hidden transition-all ${
+            jokerCooldown > 0
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-yellow-400 hover:bg-yellow-300"
+          }`}
+        >
+          {jokerCooldown > 0 && (
+            <div
+              className="absolute left-0 top-0 h-full bg-yellow-500 opacity-60 transition-all duration-100"
+              style={{ width: `${jokerProgress}%` }}
+            ></div>
+          )}
+          <span className="relative z-10">
+            {jokerCooldown > 0 ? `⏳ ${jokerCooldown}s` : "🚕 Taxi-Joker"}
+          </span>
+        </button>
+
+        {/* Timeranzeige */}
         {running && (
-          <div className={`text-center text-3xl font-bold ${time <= 3 ? "text-red-300 animate-pulse" : "text-gray-200"}`}>
+          <div
+            className={`text-center text-3xl font-bold ${
+              time <= 3 ? "text-gray-100 animate-pulse" : "text-gray-200"
+            }`}
+          >
             {time}s
           </div>
         )}
 
-        {/* Progressbar */}
+        {/* Progressbar unten */}
         {running && (
-          <div className="w-full bg-gray-700 h-4 rounded-xl overflow-hidden border border-gray-500">
+          <div className="w-full bg-gray-700 h-4 rounded-xl overflow-hidden border border-gray-500 shadow-inner">
             <div
-              className="h-4 bg-gradient-to-r from-gray-200 to-white transition-all duration-300"
+              className="h-4 bg-gradient-to-r from-gray-200 to-white transition-all duration-300 shadow-lg shadow-gray-200"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -443,45 +489,22 @@ export default function LocoQuizTaxi() {
 
         {/* Antwort */}
         {showAnswer && question && (
-          <div className="text-center text-xl font-bold text-gray-300">{question.a}</div>
+          <div className="text-center text-xl font-bold text-gray-300">
+            {question.a}
+          </div>
         )}
-
-        {/* ---------------------------------- */}
-        {/* JOKER LEISTE */}
-        {/* ---------------------------------- */}
-        <div className="mt-4 p-4 bg-gray-700 rounded-xl text-center flex flex-col gap-3">
-          <h2 className="text-xl font-bold">🎲 Joker</h2>
-
-          {/* Taxi Joker */}
-          <button
-            onClick={useTaxiJoker}
-            disabled={!jokers.taxi || taxiCooldown > 0}
-            className={`px-4 py-3 rounded-xl text-black font-bold transition-all duration-300 ${
-              !jokers.taxi
-                ? "bg-gray-600 cursor-not-allowed"
-                : taxiCooldown > 0
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-yellow-300 hover:bg-yellow-200 shadow-lg"
-            }`}
-          >
-            🚕 Taxi-Joker
-            {taxiCooldown > 0 && <span className="ml-2 text-sm">({taxiCooldown}s)</span>}
-          </button>
-        </div>
       </div>
 
-      {/* ---------------------------------- */}
       {/* INFO LEISTE RECHTS */}
-      {/* ---------------------------------- */}
-      <div className="bg-gray-800 text-white p-5 rounded-2xl shadow-xl w-[350px] h-fit">
-        <h2 className="text-2xl font-bold mb-3">ℹ️ Regeln</h2>
-
-        <ul className="space-y-2 text-gray-300">
-          <li>• Maximal <b>12 Fragen</b> pro Spieler</li>
-          <li>• Hauptgewinn: <b>1 Case</b></li>
-          <li>• Trostpreis: <b>2 Rubbellose</b></li>
-          <li>• Falsche Antwort ⇒ <b>sofort aus dem Fahrzeug!</b></li>
-          <li>• Taxi-Zone: <b>Grüne Wiese (Safezone)</b></li>
+      <div className="w-[350px] bg-gray-800 p-5 rounded-2xl shadow-xl space-y-4 h-fit">
+        <h2 className="text-2xl font-bold text-green-300">📘 Regeln</h2>
+        <ul className="text-gray-300 space-y-2 text-lg">
+          <li>✔ Maximal 12 Fragen pro Spieler</li>
+          <li>✔ Maximal 1 Joker pro Spieler</li>
+          <li>✔ Hauptgewinn: 1 Case</li>
+          <li>✔ Trostpreis: 2 Rubbelose</li>
+          <li>❌ Falsch beantwortet → Raus aus dem Taxi!</li>
+          <li>🟩 Grüne Wiese = Safezone</li>
         </ul>
       </div>
     </div>
