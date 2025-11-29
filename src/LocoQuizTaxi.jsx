@@ -168,7 +168,28 @@ const fangfragen = [
   { q: "Was kann man essen, aber nicht verdauen?", a: "Wörter (im übertragenen Sinn)." },
   { q: "Was ist so zerbrechlich, dass schon ein Flüstern es zerstört?", a: "Die Stille." },
   { q: "Was ist immer da, aber verschwindet, sobald Licht kommt?", a: "Dunkelheit." },
-  { q: "Was öffnet jede Tür, obwohl es kein Schlüssel ist?", a: "Ein Lächeln." }
+  { q: "Was öffnet jede Tür, obwohl es kein Schlüssel ist?", a: "Ein Lächeln." },
+  { q: "Was ist schwerer zu fangen, je schneller du rennst?", a: "Dein Atem" },
+{ q: "Was kann man brechen, ohne es in der Hand zu halten?", a: "Ein Versprechen" },
+{ q: "Was hat ein Bett, aber schläft nie?", a: "Ein Fluss" },
+{ q: "Was wird größer, je mehr man davon klaut?", a: "Ein Loch" },
+{ q: "Was kann jeder öffnen, aber niemand schließen?", a: "Zeit" },
+{ q: "Was kann man teilen, ohne weniger zu haben?", a: "Wissen" },
+{ q: "Was hat überall Haare, aber keinen Körper?", a: "Eine Bürste" },
+{ q: "Was läuft herum, bleibt aber immer an derselben Stelle?", a: "Die Uhr" },
+{ q: "Was hat Wurzeln, die niemand sieht, und wächst trotzdem?", a: "Ein Berg" },
+{ q: "Was ist weiß, wenn es schmutzig ist?", a: "Eine Tafel" },
+{ q: "Was geht hoch und runter, bleibt aber am selben Ort?", a: "Eine Treppe" },
+{ q: "Wovon gibt es eins in einem Zimmer, zwei in einer Küche, aber keins im Haus?", a: "Der Buchstabe K" },
+{ q: "Was gehört dir, aber andere benutzen es öfter als du?", a: "Dein Name" },
+{ q: "Was hat viele Nadeln, aber kann nicht nähen?", a: "Ein Tannenbaum" },
+{ q: "Was wird kleiner, wenn man es teilt?", a: "Ein Geheimnis" },
+{ q: "Wovor kannst du nicht weglaufen, egal wie schnell du bist?", a: "Dein Schatten" },
+{ q: "Was kannst du nur einmal aussprechen?", a: "Ein Schweigegelübde" },
+{ q: "Was kann man verlieren, obwohl man es nie in der Hand hatte?", a: "Die Geduld" },
+{ q: "Was lebt im Wasser, stirbt aber, wenn es nass wird?", a: "Salz" },
+{ q: "Was kann man werfen, obwohl man es nicht anfassen kann?", a: "Einen Blick" }
+
 ];
 
 // GAMING (60)
@@ -234,7 +255,38 @@ const gaming = [
   { q: "Wie heißt der Held mit dem Bogen in Overwatch?", a: "Hanzo." },
   { q: "In welchem Spiel kämpft man in Erangel?", a: "PUBG." },
   { q: "Wie heißt der Survival-Modus von Minecraft?", a: "Survival-Modus." },
-  { q: "Wie heißt der Modus in FIFA, in dem man Karten und Teams sammelt?", a: "Ultimate Team." }
+  { q: "Wie heißt der Modus in FIFA, in dem man Karten und Teams sammelt?", a: "Ultimate Team." },
+  { q: "Wie heißt das gelbe runde Wesen aus dem Arcade-Klassiker von 1980?", a: "Pac-Man" },
+{ q: "Wie heißt der Gegenspieler von Pac-Man?", a: "Blinky (roter Geist)" },
+{ q: "Wie heißt das erste erfolgreiche Videospiel aller Zeiten?", a: "Pong" },
+{ q: "Wie heißt der Erfinder von Mario?", a: "Shigeru Miyamoto" },
+{ q: "In welchem Jahr erschien das erste Super Mario Bros.?", a: "1985" },
+{ q: "Wie heißt Segas bekanntester Charakter?", a: "Sonic the Hedgehog" },
+{ q: "Wie heißt der Endgegner in den klassischen Sonic-Spielen?", a: "Dr. Robotnik / Dr. Eggman" },
+{ q: "Wie heißt der Held aus dem NES-Spiel 'Metroid'?", a: "Samus Aran" },
+{ q: "Wie heißt die legendäre 8-Bit-Konsole von Nintendo?", a: "NES (Nintendo Entertainment System)" },
+{ q: "Wie heißt Segas 16-Bit-Konsole?", a: "Mega Drive / Genesis" },
+{ q: "Wie heißt Links erstes Abenteuer?", a: "The Legend of Zelda (1986)" },
+{ q: "Wie heißt die Welt in den ersten Zelda-Teilen?", a: "Hyrule" },
+{ q: "Wie heißt das Alien, das Tetris weltweit bekannt machte?", a: "Keins – Tetris ist von Alexei Paschitnow" },
+{ q: "Wie heißt der Erfinder von Tetris?", a: "Alexei Paschitnow" },
+{ q: "Welche Farbe hat Mega Man hauptsächlich?", a: "Blau" },
+{ q: "Wie heißt das Arcade-Spiel, in dem man Fässer ausweicht?", a: "Donkey Kong" },
+{ q: "Wie heißt der Held aus Donkey Kong (damals noch)?", a: "Jumpman (später Mario)" },
+{ q: "Wie hieß Segas erste Handheld-Konsole?", a: "Game Gear" },
+{ q: "Wie heißt der grüne Drache aus 'Adventure Island'?", a: "Keine offizielle Antwort – das Reittier ist ein Dinosaurier" },
+{ q: "Wie heißt das berühmte Labyrinth-Spiel mit Käse und Katzen?", a: "Mappy" },
+{ q: "Wie heißt der erste Kampfspiel-Klassiker von Capcom?", a: "Street Fighter (1987)" },
+{ q: "Wie heißt der legendäre Hadouken-Werfer?", a: "Ryu" },
+{ q: "Wie heißt der Endboss aus dem Original-Street Fighter II?", a: "M. Bison" },
+{ q: "Wie heißt das Horrorhaus aus dem NES-Spiel?", a: "Sweet Home" },
+{ q: "Aus welchem Retro-Spiel stammt die Figur 'Simon Belmont'?", a: "Castlevania" },
+{ q: "Aus welchem Spiel stammt der Charakter 'Kirby'?", a: "Kirby’s Dream Land (1992)" },
+{ q: "Wie heißt das klassische Beat-'em-up mit den Brüdern Billy und Jimmy Lee?", a: "Double Dragon" },
+{ q: "Wie heißt der erste Doom-Release?", a: "1993" },
+{ q: "Wie heißt der Held aus dem Original 'Final Fantasy'?", a: "Der Krieger des Lichts (kein Name)" },
+{ q: "Wie heißt das berühmte Pen-&-Paper-inspirierte Retro-RPG von Blizzard?", a: "Diablo (1996)" }
+
 ];
 
 export default function LocoQuizTaxi() {
